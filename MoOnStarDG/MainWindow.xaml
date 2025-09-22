@@ -22,7 +22,7 @@
         <StackPanel Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
             <Label Content="Создание нового спортсмена:" FontSize="15" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <Label Content="имя:" FontSize="15" Width="80"/>
+                <Label Content="имя:" FontSize="15" Width="80" />
                 <TextBox Width="240" HorizontalAlignment="Right"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
@@ -31,19 +31,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="уровень подготовки:" FontSize="15" Width="153"/>
-                <ComboBox Width="167">
-                    <ComboBoxItem Content="{Binding }"/>
-                    <ComboBoxItem/>
-                    <ComboBoxItem/>
-                </ComboBox>
+                <ComboBox x:Name="cmdLevelOfTraining" Width="167"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="категория :" FontSize="15" Width="100"/>
-                <ComboBox Width="220">
-                    <ComboBoxItem Content="{Binding }"/>
-                    <ComboBoxItem/>
-                    <ComboBoxItem/>
-                </ComboBox>
+                <ComboBox x:Name="cmdCategory" Width="220"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Дата рождения:" FontSize="15" />
@@ -65,11 +57,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="тип тренировки:" FontSize="15" Width="122"/>
-                <ComboBox Width="200">
-                    <ComboBoxItem Content="{Binding }"/>
-                    <ComboBoxItem/>
-                    <ComboBoxItem/>
-                </ComboBox>
+                <ComboBox x:Name="cmdTraningType"  Width="200" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Дата тренировки:" FontSize="15" />

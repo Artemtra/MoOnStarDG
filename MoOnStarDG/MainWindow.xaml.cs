@@ -28,6 +28,24 @@ namespace MoOnStarDG
         public MainWindow()
         {
             InitializeComponent();
+            db = new MoOnStarDgContext();
+            LoadData();
+        }
+        private void LoadData() 
+        { 
+            sportsmans = new List<Sportsman>();
+            cmdLevelOfTraining.ItemsSource = db.LevelOfTrainings.ToList();
+            cmdLevelOfTraining.DisplayMemberPath = "Title";
+            cmdLevelOfTraining.SelectedValue = 0;
+
+            cmdCategory.ItemsSource = db.Categories.ToList();
+            cmdCategory.DisplayMemberPath= "Title";
+            cmdCategory.SelectedValue = 0;
+
+            cmdTraningType.ItemsSource = db.Types.ToList();
+            cmdTraningType.DisplayMemberPath = "Title";
+            cmdTraningType.SelectedValue = 0;
+
         }
         public List<Sportsman> Sportsmans
         {
