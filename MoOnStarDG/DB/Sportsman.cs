@@ -26,4 +26,6 @@ public partial class Sportsman
     public virtual LevelOfTraining? IdLevelNavigation { get; set; }
 
     public virtual Training? IdTraningNavigation { get; set; }
+
 }
+
