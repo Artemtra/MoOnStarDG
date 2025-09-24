@@ -1,6 +1,7 @@
 ﻿using MoOnStarDG.DB;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace MoOnStarDG
 {
@@ -34,17 +36,17 @@ namespace MoOnStarDG
         private void LoadData() 
         { 
             sportsmans = new List<Sportsman>();
-            cmdLevelOfTraining.ItemsSource = db.LevelOfTrainings.ToList();
-            cmdLevelOfTraining.DisplayMemberPath = "Title";
-            cmdLevelOfTraining.SelectedValue = 0;
+            LevelOfTraining.ItemsSource = db.LevelOfTrainings.ToList();
+            LevelOfTraining.DisplayMemberPath = "Title";
+            LevelOfTraining.SelectedValue = 0;
 
-            cmdCategory.ItemsSource = db.Categories.ToList();
-            cmdCategory.DisplayMemberPath= "Title";
-            cmdCategory.SelectedValue = 0;
+            Category.ItemsSource = db.Categories.ToList();
+            Category.DisplayMemberPath= "Title";
+            Category.SelectedValue = 0;
 
-            cmdTraningType.ItemsSource = db.Types.ToList();
-            cmdTraningType.DisplayMemberPath = "Title";
-            cmdTraningType.SelectedValue = 0;
+            TraningType.ItemsSource = db.Types.ToList();
+            TraningType.DisplayMemberPath = "Title";
+            TraningType.SelectedValue = 0;
 
         }
         public List<Sportsman> Sportsmans
@@ -65,14 +67,133 @@ namespace MoOnStarDG
                 Signal();
             }
         }
+
+
         private void Button_ClickSaveSportsman(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                // Валидация данных
+                if (string.IsNullOrWhiteSpace(Name.Text) || string.IsNullOrWhiteSpace(FirstName.Text))
+                {
+                    MessageBox.Show("Пожалуйста, заполните имя и фамилию спортсмена", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
+                if (LevelOfTraining.SelectedItem == null || Category.SelectedItem == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите уровень подготовки и категорию", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (DataBirsDay.SelectedDate == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите дату рождения", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Создание нового спортсмена
+                var newSportsman = new Sportsman
+                {
+                    Name = Name.Text.Trim(),
+                    FirstName = FirstName.Text.Trim(),
+                    IdCategory = (int)Category.SelectedValue,
+                    DDataBirsDay = DataBirsDay.SelectedDate.Value
+                };
+
+                // Сохранение в базу данных
+                db.Sportsmen.Add(newSportsman);
+                db.SaveChanges();
+
+                // Очистка формы
+                ClearSportsmanForm();
+
+                MessageBox.Show("Спортсмен успешно сохранен!", "Успех",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении спортсмена: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Button_ClickSaveTraining(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                // Валидация данных
+                if (string.IsNullOrWhiteSpace(TrainingName.Text))
+                {
+                    MessageBox.Show("Пожалуйста, введите название тренировки", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
+                if (!int.TryParse(TraningType.Text, out int duration) || duration <= 0)
+                {
+                    MessageBox.Show("Пожалуйста, введите корректную длительность тренировки (число больше 0)", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (TraningType.SelectedItem == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите тип тренировки", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (TrainingData.SelectedDate == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите дату тренировки", "Ошибка",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Создание новой тренировки
+                var newTraining = new Training
+                {
+                    Title = TrainingName.Text.Trim(),
+                    TrainingTime = duration,
+                    TypeId = (int)cmbTrainingType.SelectedValue,
+                    TrainingDate = dpTrainingDate.SelectedDate.Value
+                };
+
+                // Сохранение в базу данных
+                db.Trainings.Add(newTraining);
+                db.SaveChanges();
+
+                // Очистка формы
+                ClearTrainingForm();
+
+                MessageBox.Show("Тренировка успешно сохранена!", "Успех",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении тренировки: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void ClearSportsmanForm()
+        {
+            Name.Clear();
+            FirstName.Clear();
+            LevelOfTraining.SelectedIndex = -1;
+            Category.SelectedIndex = -1;
+            DataBirsDay.SelectedDate = null;
+        }
+
+        private void ClearTrainingForm()
+        {
+            TrainingName.Clear();
+            TrainingTime.Clear();
+            TraningType.SelectedIndex = -1;
+            TrainingData.SelectedDate = null;
         }
 
         private void Button_ClickGradeSportsman(object sender, RoutedEventArgs e)

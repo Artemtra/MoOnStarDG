@@ -9,6 +9,9 @@ public partial class Training
 
     public string? Title { get; set; }
 
+    public DateTime TrainingDate { get; set; }
+
+
     public int? TypeId { get; set; }
 
     public int? IdTrainingTime { get; set; }

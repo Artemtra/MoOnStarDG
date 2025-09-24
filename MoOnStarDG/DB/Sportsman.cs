@@ -11,7 +11,7 @@ public partial class Sportsman
 
     public string? FirstName { get; set; }
 
-    public string? DataBirsDay { get; set; }
+    public string? DDataBirsDay { get; set; }
 
     public int? IdCategory { get; set; }
 
