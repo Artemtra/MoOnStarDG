@@ -108,7 +108,7 @@ public partial class MoOnStarDgContext : DbContext
                 .HasColumnName("ID_Category");
             entity.Property(e => e.IdLevel)
                 .HasColumnType("int(11)")
-                .HasColumnName("ID_Level");
+                .HasColumnName("ID_Grade");
             entity.Property(e => e.IdTraning)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID_Traning");

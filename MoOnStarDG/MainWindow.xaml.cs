@@ -1,4 +1,5 @@
 ﻿using MoOnStarDG.DB;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -101,7 +102,6 @@ namespace MoOnStarDG
                     Name = Name.Text.Trim(),
                     FirstName = FirstName.Text.Trim(),
                     IdCategory = (int)Category.SelectedValue,
-                    DDataBirsDay = DataBirsDay.SelectedDate.Value
                 };
 
                 // Сохранение в базу данных
@@ -123,48 +123,54 @@ namespace MoOnStarDG
 
         private void Button_ClickSaveTraining(object sender, RoutedEventArgs e)
         {
+
+
             try
             {
+                var newTraining = new Training
+                {
+                    Title = TrainingName.Text.Trim()
+                };
+                if (DataBirsDay.SelectedDate != null)
+                    newTraining.TrainingDate = DataBirsDay.SelectedDate.Value;
+                newTraining.IdTrainingTime = int.Parse(TrainingTime.Text);
+                newTraining.TypeId = (TraningType.SelectedItem as MoOnStarDG.DB.Type).Id;
+                
                 // Валидация данных
                 if (string.IsNullOrWhiteSpace(TrainingName.Text))
                 {
                     MessageBox.Show("Пожалуйста, введите название тренировки", "Ошибка",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (!int.TryParse(TraningType.Text, out int duration) || duration <= 0)
+                if (!int.TryParse(TraningType.Text, out int IdTrainingTime) || IdTrainingTime <= 0)
                 {
                     MessageBox.Show("Пожалуйста, введите корректную длительность тренировки (число больше 0)", "Ошибка",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (TraningType.SelectedItem == null)
                 {
                     MessageBox.Show("Пожалуйста, выберите тип тренировки", "Ошибка",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (TrainingData.SelectedDate == null)
                 {
                     MessageBox.Show("Пожалуйста, выберите дату тренировки", "Ошибка",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
+
                 // Создание новой тренировки
-                var newTraining = new Training
-                {
-                    Title = TrainingName.Text.Trim(),
-                    TrainingTime = duration,
-                    TypeId = (int)cmbTrainingType.SelectedValue,
-                    TrainingDate = dpTrainingDate.SelectedDate.Value
-                };
+
 
                 // Сохранение в базу данных
-                db.Trainings.Add(newTraining);
+                db.Training.Add(newTraining);
                 db.SaveChanges();
 
                 // Очистка формы
