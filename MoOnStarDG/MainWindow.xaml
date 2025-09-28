@@ -15,57 +15,71 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center"  >
+
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Label Content="Главное окно" FontWeight="Bold" FontSize="20"/>
         </StackPanel>
-        
+
         <StackPanel Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
             <Label Content="Создание нового спортсмена:" FontSize="16" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="имя:" FontSize="15" Width="80" />
-                <TextBox Width="240" HorizontalAlignment="Right" x:Name="Name"/>
+                <TextBox Width="240" Text="{Binding InsertSportsman.Name, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Фамилия:" FontSize="15" Width="80"/>
-                <TextBox Width="240" x:Name="FirstName" />
+                <TextBox Width="240" Text="{Binding InsertSportsman.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="уровень подготовки:" FontSize="15" Width="153"/>
-                <ComboBox x:Name="LevelOfTraining" Width="167"/>
+                <ComboBox x:Name="LevelOfTraining" Width="167"
+                         ItemsSource="{Binding LevelOfTrainings}"
+                         DisplayMemberPath="Title"
+                         SelectedValue="{Binding InsertSportsman.IdTraning, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedValuePath="Id"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="категория :" FontSize="15" Width="100"/>
-                <ComboBox x:Name="Category" Width="220"/>
+                <ComboBox x:Name="Category" Width="220"
+                         ItemsSource="{Binding Categories}"
+                         DisplayMemberPath="Title"
+                         SelectedValue="{Binding InsertSportsman.IdCategory}"
+                         SelectedValuePath="Id"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Дата рождения:" FontSize="15" />
-                <DatePicker Width="200" x:Name="DataBirsDay"/>
-            </StackPanel >
-            <Button Content="Сохранить" Height="30" Width="267" HorizontalAlignment="Left" Margin="0 10 0 0" Click="Button_ClickSaveSportsman"/>
+                <DatePicker Width="200" SelectedDate="{Binding InsertSportsman.DataBirsDay}"/>
+            </StackPanel>
+            <Button Content="Сохранить" Height="30" Width="267" HorizontalAlignment="Left" Margin="0 10 0 0" 
+                   Command="{Binding SaveSportsmanCommand}"/>
         </StackPanel>
 
-        
-        <StackPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" >
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <Label Content="Запланированная тренировка:" FontSize="16" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Название:" FontSize="15" Width="122"/>
-                <TextBox Width="200" x:Name="TrainingName"/>
+                <TextBox Width="200" Text="{Binding InsertTraining.Title, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="длительность:" FontSize="15" Width="122"/>
-                <TextBox Width="200" x:Name="TrainingTime"/>
+                <TextBox Width="200" Text="{Binding InsertTrainingTime.Duration, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="тип тренировки:" FontSize="15" Width="122"/>
-                <ComboBox x:Name="TraningType"  Width="200" />
+                <ComboBox x:Name="TraningType" Width="200"
+                         ItemsSource="{Binding TrainingTypes}"
+                         DisplayMemberPath="Title"
+                         SelectedValue="{Binding InsertTraining.TypeId}"
+                         SelectedValuePath="Id"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                 <Label Content="Дата тренировки:" FontSize="15" />
-                <DatePicker Width="193" x:Name="TrainingData"/>
-            </StackPanel >
-            <Button Content="Сохранить" Height="30" Width="267" HorizontalAlignment="Left" Margin="0 10 0 0" Click="Button_ClickSaveTraining"/>
+                <DatePicker Width="193" SelectedDate="{Binding InsertTraining.TrainingDate}"/>
+            </StackPanel>
+            <Button Content="Сохранить" Height="30" Width="267" HorizontalAlignment="Left" Margin="0 10 0 0" Click=""/>
         </StackPanel>
-        <Button Content="Оценка Тренера" Width="125" FontSize="15" Height="50" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FFE6DBA9" Margin="5" Click="Button_ClickGradeSportsman" />
 
+        <Button Content="Оценка Тренера" Width="125" FontSize="15" Height="50" Grid.Row="1" Grid.Column="1" 
+               HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FFE6DBA9" Margin="5" Click="Button_ClickNewWindow" />
     </Grid>
 </Window>

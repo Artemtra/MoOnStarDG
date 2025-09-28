@@ -6,7 +6,79 @@
         xmlns:local="clr-namespace:MoOnStarDG"
         mc:Ignorable="d"
         Title="SportsMan" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Background="#FFD2A782">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+               Content="Списки спортсменов и тренировок" 
+               FontWeight="Bold" FontSize="20" 
+               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+            <Label Content="Список спортсменов:" FontSize="16" FontWeight="Bold"/>
+            <ListView ItemsSource="{Binding Sportsmans}" 
+                      SelectedItem="{Binding SelectedSportsman}"
+                      Height="240" Background="White"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Фамилия" Width="120" DisplayMemberBinding="{Binding FirstName}"/>
+                        <GridViewColumn Header="Дата рождения" Width="100" 
+                                      DisplayMemberBinding="{Binding DataBirsDay, StringFormat=dd.MM.yyyy}"/>
+                        <GridViewColumn Header="Уровень" Width="120" 
+                                      DisplayMemberBinding="{Binding IdTraningNavigation.Title}"/>
+                        <GridViewColumn Header="Категория" Width="100" 
+                                      DisplayMemberBinding="{Binding IdCategoryNavigation.Title}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <TextBlock Margin="0 5 0 0" FontSize="12" FontStyle="Italic">
+                Всего спортсменов: <Run Text="{Binding Sportsmans.Count}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Gray" Width="1" 
+                   VerticalAlignment="Stretch" Margin="0 40 0 40"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Margin="10">
+            <Label Content="Список тренировок:" FontSize="16" FontWeight="Bold"/>
+
+            <ListView ItemsSource="{Binding Trainings}" 
+                      SelectedItem="{Binding SelectedTraining}"
+                      Height="240" Background="White"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Название" Width="150" DisplayMemberBinding="{Binding Title}"/>
+                        <GridViewColumn Header="Тип" Width="120" 
+                                      DisplayMemberBinding="{Binding Type.Title}"/>
+                        <GridViewColumn Header="Дата" Width="100" 
+                                      DisplayMemberBinding="{Binding TrainingDate, StringFormat=dd.MM.yyyy}"/>
+                        <GridViewColumn Header="Длительность" Width="80" 
+                                      DisplayMemberBinding="{Binding IdTrainingTime}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <TextBlock Margin="0 5 0 0" FontSize="12" FontStyle="Italic">
+                Всего тренировок: <Run Text="{Binding Trainings.Count}"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Обновить данные" Width="120" Height="30" Margin="5"
+                    Command="{Binding RefreshCommand}" Background="#FFE6DBA9"/>
+            <Button Content="Назад" Width="80" Height="30" Margin="5"
+                    Command="{Binding BackToMainCommand}" Background="#FFE6DBA9"/>
+        </StackPanel>
     </Grid>
 </Window>
