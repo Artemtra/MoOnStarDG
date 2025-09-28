@@ -20,63 +20,35 @@ namespace MoOnStarDG
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        private MoOnStarDgContext db;
-        private Sportsman insertSportsman;
-        private Training insertTraining;
-        private TrainingTime insertTrainingTime;
+        MoOnStarDgContext db;
+        private Sportsman insertSportsman = new Sportsman();
         private List<Sportsman> sportsmans;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public MainWindowViewModel()
+        public event PropertyChangedEventHandler? PropertyChanged;
+        void Signal([CallerMemberName] string prop = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        public MainWindow()
         {
+            InitializeComponent();
             db = new MoOnStarDgContext();
-            InsertSportsman = new Sportsman();
-            InsertTraining = new Training();
             LoadData();
-
-            SaveSportsmanCommand = new RelayCommand(SaveSportsman);
-            SaveTrainingCommand = new RelayCommand(SaveTraining);
         }
-
         private void LoadData()
         {
-            sportsmans = db.Sportsmen.ToList();
-            LevelOfTrainings = db.LevelOfTrainings.ToList();
-            Categories = db.Categories.ToList();
-            TrainingTypes = db.Types.ToList();
-        }
+            sportsmans = new List<Sportsman>();
+            LevelOfTraining.ItemsSource = db.LevelOfTrainings.ToList();
+            LevelOfTraining.DisplayMemberPath = "Title";
+            LevelOfTraining.SelectedValue = 0;
 
-        public Sportsman InsertSportsman
-        {
-            get => insertSportsman;
-            set
-            {
-                insertSportsman = value;
-                OnPropertyChanged();
-            }
-        }
+            Category.ItemsSource = db.Categories.ToList();
+            Category.DisplayMemberPath = "Title";
+            Category.SelectedValue = 0;
 
-        public Training InsertTraining
-        {
-            get => insertTraining;
-            set
-            {
-                insertTraining = value;
-                OnPropertyChanged();
-            }
-        }
+            TraningType.ItemsSource = db.Types.ToList();
+            TraningType.DisplayMemberPath = "Title";
+            TraningType.SelectedValue = 0;
 
-        public TrainingTime InsertTrainingTime
-        {
-            get => insertTrainingTime;
-            set
-            {
-                insertTrainingTime = value;
-                OnPropertyChanged();
-            }
         }
         public List<Sportsman> Sportsmans
         {
@@ -84,48 +56,99 @@ namespace MoOnStarDG
             set
             {
                 sportsmans = value;
-                OnPropertyChanged();
+                Signal();
+            }
+        }
+        public Sportsman InsertSportsman
+        {
+            get => insertSportsman;
+            set
+            {
+                insertSportsman = value;
+                Signal();
             }
         }
 
-        public List<LevelOfTraining> LevelOfTrainings { get; set; }
-        public List<Category> Categories { get; set; }
-        public List<DB.Type> TrainingTypes { get; set; }
 
-        public ICommand SaveSportsmanCommand { get; }
-        public ICommand SaveTrainingCommand { get; }
-        public ICommand OpenSportsmanGradeCommand { get; }
-
-        private void SaveSportsman()
+        private void Button_ClickSaveSportsman(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(InsertSportsman.Name) || string.IsNullOrWhiteSpace(InsertSportsman.FirstName))
+                // Валидация данных
+                if (string.IsNullOrWhiteSpace(Name.Text) || string.IsNullOrWhiteSpace(FirstName.Text))
                 {
                     MessageBox.Show("Пожалуйста, заполните имя и фамилию спортсмена", "Ошибка",
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (InsertSportsman.IdTraning == 0 || InsertSportsman.IdCategory == 0)
+                //if (LevelOfTraining.SelectedItem == null || Category.SelectedItem == null)
+                //{
+                //    MessageBox.Show("Пожалуйста, выберите уровень подготовки и категорию", "Ошибка",
+                //                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                //    return;
+                //}
+                var newSportsman = new Sportsman
                 {
-                    MessageBox.Show("Пожалуйста, выберите уровень подготовки и категорию", "Ошибка",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Name = Name.Text.Trim(),
+                    FirstName = FirstName.Text.Trim(),
+                    //IdCategory = (int)Category.SelectedValue,
+                };
+
+                if ("Beginner" == LevelOfTraining.SelectedItem)
+                {
+                    newSportsman.IdTraning = 1;
+                }
+                else if ("Middle " == LevelOfTraining.SelectedItem)
+                {
+                    newSportsman.IdTraning = 2;
+                }
+                else if ("Advenced" == LevelOfTraining.SelectedItem)
+                {
+                    newSportsman.IdTraning = 3;
+                }
+                else
+                {
+                    MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
+                     MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (InsertSportsman.DataBirsDay == null)
+                if (DataBirsDay.SelectedDate == null)
                 {
                     MessageBox.Show("Пожалуйста, выберите дату рождения", "Ошибка",
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                db.Sportsmen.Add(InsertSportsman);
+                // Создание нового спортсмена
+
+                if ("Cardio " == Category.SelectedValue)
+                {
+                    newSportsman.IdCategory = 1;
+                }
+                else if ("Cryfder" == Category.SelectedValue)
+                {
+                    newSportsman.IdCategory = 2;
+                }
+                else if ("Technegol" == Category.SelectedValue)
+                {
+                    newSportsman.IdCategory = 3;
+                }
+                else
+                {
+                    MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
+                     MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+
+                // Сохранение в базу данных
+                db.Sportsmen.Add(newSportsman);
                 db.SaveChanges();
 
-                Sportsmans = db.Sportsmen.ToList();
-                InsertSportsman = new Sportsman();
+                // Очистка формы
+                ClearSportsmanForm();
 
                 MessageBox.Show("Спортсмен успешно сохранен!", "Успех",
                               MessageBoxButton.OK, MessageBoxImage.Information);
@@ -137,42 +160,76 @@ namespace MoOnStarDG
             }
         }
 
-        private void SaveTraining()
+
+        private void Button_ClickSaveTraining(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(InsertTraining.Title))
+                var newTraining = new Training
+                {
+                    Title = TrainingName.Text.Trim()
+                };
+
+                // Валидация данных
+                if (string.IsNullOrWhiteSpace(TrainingName.Text))
                 {
                     MessageBox.Show("Пожалуйста, введите название тренировки", "Ошибка",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (InsertTraining.IdTrainingTime <= 0)
+                //if (!int.TryParse(TraningType.Text, out int IdTrainingTime) || IdTrainingTime <= 0)
+                //{
+                //    MessageBox.Show("Пожалуйста, введите корректную длительность тренировки (число больше 0)", "Ошибка",
+                //    MessageBoxButton.OK, MessageBoxImage.Warning);
+                //    return;
+                //}
+
+
+                if (TraningType.SelectedItem == "Junior")
                 {
-                    MessageBox.Show("Пожалуйста, введите корректную длительность тренировки (число больше 0)", "Ошибка",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                    newTraining.TypeId = 1;
+                }
+                else if (TraningType.SelectedItem == "Adult")
+                {
+                    newTraining.TypeId = 11;
+                }
+                else if (TraningType.SelectedItem == "Master")
+                {
+                    newTraining.TypeId = 111;
+                }
+                else
+                {
+                    MessageBox.Show("Пожалуйста выберите тип тренировки", "Ошибка",
+                     MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (InsertTraining.TypeId == 0)
+                if (TrainingData.SelectedDate == null)
                 {
-                    MessageBox.Show("Пожалуйста, выберите тип тренировки", "Ошибка",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
 
-                if (InsertTraining.TrainingDate == null)
-                {
                     MessageBox.Show("Пожалуйста, выберите дату тренировки", "Ошибка",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                db.Training.Add(InsertTraining);
+                if (DataBirsDay.SelectedDate != null)
+                    newTraining.TrainingDate = DataBirsDay.SelectedDate.Value;
+                newTraining.IdTrainingTime = int.Parse(TrainingTime.Text);
+                //newTraining.TypeId = (TraningType.SelectedItem as MoOnStarDG.DB.Type).Id;
+
+
+
+                // Создание новой тренировки
+
+
+                // Сохранение в базу данных
+                db.Training.Add(newTraining);
                 db.SaveChanges();
 
-                InsertTraining = new Training();
+                // Очистка формы
+                ClearTrainingForm();
 
                 MessageBox.Show("Тренировка успешно сохранена!", "Успех",
                               MessageBoxButton.OK, MessageBoxImage.Information);
@@ -183,17 +240,28 @@ namespace MoOnStarDG
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void ClearSportsmanForm()
+        {
+            Name.Clear();
+            FirstName.Clear();
+            LevelOfTraining.SelectedIndex = -1;
+            Category.SelectedIndex = -1;
+            DataBirsDay.SelectedDate = null;
+        }
+
+        private void ClearTrainingForm()
+        {
+            TrainingName.Clear();
+            TrainingTime.Clear();
+            TraningType.SelectedIndex = -1;
+            TrainingData.SelectedDate = null;
+        }
 
         private void Button_ClickGradeSportsman(object sender, RoutedEventArgs e)
         {
             SportsMan sportsMan = new SportsMan();
             sportsMan.Show();
             this.Close();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

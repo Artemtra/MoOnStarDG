@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 using MoOnStarDG.DB;
 
 namespace MoOnStarDG
@@ -22,90 +23,136 @@ namespace MoOnStarDG
     /// </summary>
     public partial class SportsMan : Window
     {
-        private MoOnStarDgContext db;
-        private List<Sportsman> sportsmans;
-        private List<Training> trainings;
-        private Sportsman selectedSportsman;
-        private Training selectedTraining;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        MoOnStarDgContext db;
 
         public SportsMan()
         {
+            InitializeComponent();
             db = new MoOnStarDgContext();
             LoadData();
-
-            RefreshCommand = new RelayCommand(RefreshData);
-            BackToMainCommand = new RelayCommand(BackToMain);
         }
 
         private void LoadData()
         {
-
-        }
-
-        public List<Sportsman> Sportsmans
-        {
-            get => sportsmans;
-            set
+            try
             {
-                sportsmans = value;
-                OnPropertyChanged();
+                // Загрузка спортсменов с связанными данными
+                var sportsmen = db.Sportsmen
+                    .Include(s => s.IdCategory)
+                    .Include(s => s.Grades)
+                    .ToList();
+                SportsmenGrid.ItemsSource = sportsmen;
+
+                // Загрузка тренировок с связанными данными
+                var trainings = db.Training
+                    .Include(t => t.Type)
+                    .ToList();
+                TrainingsGrid.ItemsSource = trainings;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        public List<Training> Trainings
+        private void RefreshSportsmenBtn_Click(object sender, RoutedEventArgs e)
         {
-            get => trainings;
-            set
+            try
             {
-                trainings = value;
-                OnPropertyChanged();
+                var sportsmen = db.Sportsmen
+                    .Include(s => s.IdCategory)
+                    .Include(s => s.Grades)
+                    .ToList();
+                SportsmenGrid.ItemsSource = sportsmen;
+                MessageBox.Show("Список спортсменов обновлен", "Информация",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при обновлении списка спортсменов: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        public Sportsman SelectedSportsman
+        private void RefreshTrainingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            get => selectedSportsman;
-            set
+            try
             {
-                selectedSportsman = value;
-                OnPropertyChanged();
+                var trainings = db.Training
+                    .Include(t => t.Type)
+                    .ToList();
+                TrainingsGrid.ItemsSource = trainings;
+                MessageBox.Show("Список тренировок обновлен", "Информация",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при обновлении списка тренировок: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        public Training SelectedTraining
+        private void DeleteSportsmanBtn_Click(object sender, RoutedEventArgs e)
         {
-            get => selectedTraining;
-            set
+            if (SportsmenGrid.SelectedItem is Sportsman selectedSportsman)
             {
-                selectedTraining = value;
-                OnPropertyChanged();
+                try
+                {
+                    var result = MessageBox.Show($"Вы уверены, что хотите удалить спортсмена {selectedSportsman.Name} {selectedSportsman.FirstName}?","Подтверждение удаления",MessageBoxButton.YesNo,MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        db.Sportsmen.Remove(selectedSportsman);
+                        db.SaveChanges();
+                        LoadData(); // Перезагружаем данные
+                        MessageBox.Show("Спортсмен успешно удален", "Успех",MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при удалении спортсмена: {ex.Message}", "Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите спортсмена для удаления", "Информация",MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
-        public ICommand RefreshCommand { get; }
-        public ICommand BackToMainCommand { get; }
-
-        private void RefreshData()
+        private void DeleteTrainingBtn_Click(object sender, RoutedEventArgs e)
         {
-            LoadData();
-            MessageBox.Show("Данные обновлены!", "Успех",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            if (TrainingsGrid.SelectedItem is Training selectedTraining)
+            {
+                try
+                {
+                    var result = MessageBox.Show($"Вы уверены, что хотите удалить тренировку '{selectedTraining.Title}'?",
+                                               "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        db.Training.Remove(selectedTraining);
+                        db.SaveChanges();
+                        LoadData(); // Перезагружаем данные
+                        MessageBox.Show("Тренировка успешно удалена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при удалении тренировки: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите тренировку для удаления", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
-        private void BackToMain()
+        private void BackToMainBtn_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
-            Application.Current.MainWindow?.Close();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.Close();
         }
     }
-
 }
-
