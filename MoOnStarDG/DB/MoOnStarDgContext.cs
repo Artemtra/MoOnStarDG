@@ -68,10 +68,6 @@ public partial class MoOnStarDgContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("ID_Sportsman");
             entity.Property(e => e.Title).HasMaxLength(255);
-
-            entity.HasOne(d => d.IdSportsmanNavigation).WithMany(p => p.Grades)
-                .HasForeignKey(d => d.IdSportsman)
-                .HasConstraintName("FK_Grade_Sportsman_ID");
         });
 
         modelBuilder.Entity<LevelOfTraining>(entity =>
@@ -96,22 +92,19 @@ public partial class MoOnStarDgContext : DbContext
 
             entity.HasIndex(e => e.IdLevel, "FK_Sportsman_LevelOfTraining_ID");
 
-            entity.HasIndex(e => e.IdTraning, "FK_Sportsman_Training_ID");
-
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID");
-            entity.Property(e => e.DataBirsDay).HasMaxLength(255);
+            entity.Property(e => e.DdataBirsDay)
+                .HasMaxLength(255)
+                .HasColumnName("DDataBirsDay");
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.IdCategory)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID_Category");
             entity.Property(e => e.IdLevel)
                 .HasColumnType("int(11)")
-                .HasColumnName("ID_Grade");
-            entity.Property(e => e.IdTraning)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Traning");
+                .HasColumnName("ID_Level");
             entity.Property(e => e.Name).HasMaxLength(50);
 
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Sportsmen)
@@ -121,28 +114,43 @@ public partial class MoOnStarDgContext : DbContext
             entity.HasOne(d => d.IdLevelNavigation).WithMany(p => p.Sportsmen)
                 .HasForeignKey(d => d.IdLevel)
                 .HasConstraintName("FK_Sportsman_LevelOfTraining_ID");
-
-            entity.HasOne(d => d.IdTraningNavigation).WithMany(p => p.Sportsmen)
-                .HasForeignKey(d => d.IdTraning)
-                .HasConstraintName("FK_Sportsman_Training_ID");
         });
 
         modelBuilder.Entity<Training>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
+            entity.HasIndex(e => e.IdGrade, "FK_Training_Grade_ID");
+
             entity.HasIndex(e => e.TypeId, "FK_Training_Math_ID");
+
+            entity.HasIndex(e => e.IdSportsmen, "FK_Training_Sportsman_ID");
 
             entity.HasIndex(e => e.IdTrainingTime, "FK_Training_TrainingTime_ID");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID");
+            entity.Property(e => e.IdGrade)
+                .HasColumnType("int(11)")
+                .HasColumnName("ID_grade");
+            entity.Property(e => e.IdSportsmen)
+                .HasColumnType("int(11)")
+                .HasColumnName("ID_sportsmen");
             entity.Property(e => e.IdTrainingTime)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID_TrainingTime");
             entity.Property(e => e.Title).HasMaxLength(255);
+            entity.Property(e => e.TrainingDate).HasMaxLength(255);
             entity.Property(e => e.TypeId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.IdGradeNavigation).WithMany(p => p.Training)
+                .HasForeignKey(d => d.IdGrade)
+                .HasConstraintName("FK_Training_Grade_ID");
+
+            entity.HasOne(d => d.IdSportsmenNavigation).WithMany(p => p.Training)
+                .HasForeignKey(d => d.IdSportsmen)
+                .HasConstraintName("FK_Training_Sportsman_ID");
 
             entity.HasOne(d => d.IdTrainingTimeNavigation).WithMany(p => p.Training)
                 .HasForeignKey(d => d.IdTrainingTime)

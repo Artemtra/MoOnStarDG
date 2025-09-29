@@ -11,21 +11,15 @@ public partial class Sportsman
 
     public string? FirstName { get; set; }
 
-    public string? DataBirsDay { get; set; }
+    public string? DdataBirsDay { get; set; }
 
     public int? IdCategory { get; set; }
 
     public int? IdLevel { get; set; }
 
-    public int? IdTraning { get; set; }
-
-    public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
-
     public virtual Category? IdCategoryNavigation { get; set; }
 
     public virtual LevelOfTraining? IdLevelNavigation { get; set; }
 
-    public virtual Training? IdTraningNavigation { get; set; }
-
+    public virtual ICollection<Training> Training { get; set; } = new List<Training>();
 }
-

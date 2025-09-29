@@ -9,16 +9,21 @@ public partial class Training
 
     public string? Title { get; set; }
 
-    public DateTime TrainingDate { get; set; }
-
-
     public int? TypeId { get; set; }
 
     public int? IdTrainingTime { get; set; }
 
-    public virtual TrainingTime? IdTrainingTimeNavigation { get; set; }
+    public string? TrainingDate { get; set; }
 
-    public virtual ICollection<Sportsman> Sportsmen { get; set; } = new List<Sportsman>();
+    public int? IdSportsmen { get; set; }
+
+    public int? IdGrade { get; set; }
+
+    public virtual Grade? IdGradeNavigation { get; set; }
+
+    public virtual Sportsman? IdSportsmenNavigation { get; set; }
+
+    public virtual TrainingTime? IdTrainingTimeNavigation { get; set; }
 
     public virtual Type? Type { get; set; }
 }

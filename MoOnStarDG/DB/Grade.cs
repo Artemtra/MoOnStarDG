@@ -13,5 +13,5 @@ public partial class Grade
 
     public int? IdSportsman { get; set; }
 
-    public virtual Sportsman? IdSportsmanNavigation { get; set; }
+    public virtual ICollection<Training> Training { get; set; } = new List<Training>();
 }

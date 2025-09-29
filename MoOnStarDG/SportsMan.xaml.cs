@@ -37,8 +37,8 @@ namespace MoOnStarDG
             try
             {
                 var sportsmen = db.Sportsmen
-                    .Include(s => s.IdCategory)
-                    .Include(s => s.Grades)
+                    .Include(s => s.IdCategoryNavigation)
+                    .Include(s => s.IdLevelNavigation)
                     .ToList();
                 SportsmenGrid.ItemsSource = sportsmen;
 

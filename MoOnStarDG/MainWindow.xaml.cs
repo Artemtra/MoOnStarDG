@@ -49,6 +49,10 @@ namespace MoOnStarDG
             TraningType.DisplayMemberPath = "Title";
             TraningType.SelectedValue = 0;
 
+            IdSportsman.ItemsSource = db.Sportsmen.ToList();
+            IdSportsman.DisplayMemberPath= "Id";
+            IdSportsman.SelectedValue = 0;
+
         }
         public List<Sportsman> Sportsmans
         {
@@ -95,20 +99,11 @@ namespace MoOnStarDG
                     //IdCategory = (int)Category.SelectedValue,
                 };
 
-                if ("Beginner" == LevelOfTraining.SelectedItem)
+                newSportsman.IdLevel = (LevelOfTraining.SelectedItem as LevelOfTraining).Id;
+
+                if (newSportsman.IdLevel == 0)
                 {
-                    newSportsman.IdTraning = 1;
-                }
-                else if ("Middle " == LevelOfTraining.SelectedItem)
-                {
-                    newSportsman.IdTraning = 2;
-                }
-                else if ("Advenced" == LevelOfTraining.SelectedItem)
-                {
-                    newSportsman.IdTraning = 3;
-                }
-                else
-                {
+
                     MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
                      MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -120,24 +115,15 @@ namespace MoOnStarDG
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+                newSportsman.DdataBirsDay = DataBirsDay.SelectedDate?.ToShortDateString();
 
                 // Создание нового спортсмена
+                newSportsman.IdCategory = (Category.SelectedValue as Category).Id;
 
-                if ("Cardio " == Category.SelectedValue)
+                if (newSportsman.IdCategory == 0)
                 {
-                    newSportsman.IdCategory = 1;
-                }
-                else if ("Cryfder" == Category.SelectedValue)
-                {
-                    newSportsman.IdCategory = 2;
-                }
-                else if ("Technegol" == Category.SelectedValue)
-                {
-                    newSportsman.IdCategory = 3;
-                }
-                else
-                {
-                    MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
+
+                    MessageBox.Show("Пожалуйста выберите тип тренировки", "Ошибка",
                      MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -184,24 +170,20 @@ namespace MoOnStarDG
                 //    MessageBoxButton.OK, MessageBoxImage.Warning);
                 //    return;
                 //}
-
-
-                if (TraningType.SelectedItem == "Junior")
+                newTraining.IdSportsmen = (IdSportsman.SelectedItem as MoOnStarDG.DB.Sportsman).Id;
+                if (newTraining.IdSportsmen == 0)
                 {
 
-                    newTraining.TypeId = 1;
+                    MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
+                     MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
-                else if (TraningType.SelectedItem == "Adult")
+                newTraining.TypeId = (TraningType.SelectedItem as MoOnStarDG.DB.Type).Id;
+
+                if (newTraining.TypeId == 0)
                 {
-                    newTraining.TypeId = 11;
-                }
-                else if (TraningType.SelectedItem == "Master")
-                {
-                    newTraining.TypeId = 111;
-                }
-                else
-                {
-                    MessageBox.Show("Пожалуйста выберите тип тренировки", "Ошибка",
+
+                    MessageBox.Show("Пожалуйста выберите что-то", "Ошибка",
                      MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -213,9 +195,10 @@ namespace MoOnStarDG
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+                newTraining.TrainingDate = TrainingData.SelectedDate?.ToShortDateString();
 
                 if (DataBirsDay.SelectedDate != null)
-                    newTraining.TrainingDate = DataBirsDay.SelectedDate.Value;
+                    newTraining.TrainingDate = DataBirsDay.SelectedDate.Value.ToShortDateString();
                 newTraining.IdTrainingTime = int.Parse(TrainingTime.Text);
                 //newTraining.TypeId = (TraningType.SelectedItem as MoOnStarDG.DB.Type).Id;
 
