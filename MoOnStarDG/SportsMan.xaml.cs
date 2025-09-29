@@ -36,14 +36,12 @@ namespace MoOnStarDG
         {
             try
             {
-                // Загрузка спортсменов с связанными данными
                 var sportsmen = db.Sportsmen
                     .Include(s => s.IdCategory)
                     .Include(s => s.Grades)
                     .ToList();
                 SportsmenGrid.ItemsSource = sportsmen;
 
-                // Загрузка тренировок с связанными данными
                 var trainings = db.Training
                     .Include(t => t.Type)
                     .ToList();
@@ -105,7 +103,7 @@ namespace MoOnStarDG
                     {
                         db.Sportsmen.Remove(selectedSportsman);
                         db.SaveChanges();
-                        LoadData(); // Перезагружаем данные
+                        LoadData(); 
                         MessageBox.Show("Спортсмен успешно удален", "Успех",MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -133,7 +131,7 @@ namespace MoOnStarDG
                     {
                         db.Training.Remove(selectedTraining);
                         db.SaveChanges();
-                        LoadData(); // Перезагружаем данные
+                        LoadData(); 
                         MessageBox.Show("Тренировка успешно удалена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
