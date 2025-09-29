@@ -124,8 +124,7 @@ namespace MoOnStarDG
             {
                 try
                 {
-                    var result = MessageBox.Show($"Вы уверены, что хотите удалить тренировку '{selectedTraining.Title}'?",
-                                               "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var result = MessageBox.Show($"Вы уверены, что хотите удалить тренировку '{selectedTraining.Title}'?","Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
