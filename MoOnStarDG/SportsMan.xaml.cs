@@ -40,12 +40,12 @@ namespace MoOnStarDG
                     .Include(s => s.IdCategoryNavigation)
                     .Include(s => s.IdLevelNavigation)
                     .ToList();
-                SportsmenGrid.ItemsSource = sportsmen;
+                SportsmenList.ItemsSource = sportsmen;
 
                 var trainings = db.Training
                     .Include(t => t.Type)
                     .ToList();
-                TrainingsGrid.ItemsSource = trainings;
+                SportsmenList.ItemsSource = trainings;
             }
             catch (Exception ex)
             {

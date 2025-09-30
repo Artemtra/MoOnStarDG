@@ -19,47 +19,45 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Список спортсменов и тренировок" 
-               FontWeight="Bold" FontSize="20" HorizontalAlignment="Center"/>
+           FontWeight="Bold" FontSize="20" HorizontalAlignment="Center"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Label Content="Спортсмены:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-            <DataGrid x:Name="SportsmenGrid" 
-                     AutoGenerateColumns="False" 
-                     CanUserAddRows="False"
-                     Background="White"
-                     Height="270">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" Width="100"/>
-                    <DataGridTextColumn Header="Фамилия" Binding="{Binding FirstName}" Width="120"/>
-                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding DdataBirsDay}" Width="110"/>
-                    <DataGridTextColumn Header="Категория" Binding="{Binding IdCategoryNavigation.Title}" Width="100"/>
-                    <DataGridTextColumn Header="Уровень" Binding="{Binding IdLevelNavigation.Title}" Width="100"/>
-                </DataGrid.Columns>
-            </DataGrid>
-
+            <ListView x:Name="SportsmenList" 
+                 Background="White"
+                 Height="270">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}" Width="100"/>
+                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding FirstName}" Width="120"/>
+                        <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding DdataBirsDay}" Width="110"/>
+                        <GridViewColumn Header="Категория" DisplayMemberBinding="{Binding IdCategoryNavigation.Title}" Width="100"/>
+                        <GridViewColumn Header="Уровень" DisplayMemberBinding="{Binding IdLevelNavigation.Title}" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </StackPanel>
 
         <Rectangle Grid.Row="1" Grid.Column="1" Fill="Gray" Width="2" HorizontalAlignment="Center"/>
 
         <StackPanel Grid.Row="1" Grid.Column="2">
             <Label Content="Тренировки:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-            <DataGrid x:Name="TrainingsGrid" 
-                     AutoGenerateColumns="False" 
-                     CanUserAddRows="False"
-                     Background="White"
-                     Height="270">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="150"/>
-                    <DataGridTextColumn Header="Дата" Binding="{Binding TrainingDate}" Width="100"/>
-                    <DataGridTextColumn Header="Длительность" Binding="{Binding IdTrainingTime}" Width="150"/>
-                    <DataGridTextColumn Header="Тип" Binding="{Binding Type.Title}" Width="100"/>
-
-                </DataGrid.Columns>
-            </DataGrid>
+            <ListView x:Name="TrainingsList" 
+                 Background="White"
+                 Height="270">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}" Width="150"/>
+                        <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding TrainingDate}" Width="100"/>
+                        <GridViewColumn Header="Длительность" DisplayMemberBinding="{Binding IdTrainingTime}" Width="150"/>
+                        <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Type.Title}" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </StackPanel>
 
         <Button Grid.Row="2" Grid.ColumnSpan="3" Content="Назад в главное меню" 
-               Click="BackToMainBtn_Click" Width="150" Height="30" 
-               HorizontalAlignment="Center" Background="#FFE6DBA9"/>
+           Click="BackToMainBtn_Click" Width="150" Height="30" 
+           HorizontalAlignment="Center" Background="#FFE6DBA9"/>
     </Grid>
 </Window>
