@@ -26,8 +26,6 @@ public partial class MoOnStarDgContext : DbContext
 
     public virtual DbSet<Training> Training { get; set; }
 
-    public virtual DbSet<TrainingTime> TrainingTimes { get; set; }
-
     public virtual DbSet<Type> Types { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -126,7 +124,7 @@ public partial class MoOnStarDgContext : DbContext
 
             entity.HasIndex(e => e.IdSportsmen, "FK_Training_Sportsman_ID");
 
-            entity.HasIndex(e => e.IdTrainingTime, "FK_Training_TrainingTime_ID");
+            entity.HasIndex(e => e.TrainingTime, "FK_Training_TrainingTime_ID");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -137,9 +135,6 @@ public partial class MoOnStarDgContext : DbContext
             entity.Property(e => e.IdSportsmen)
                 .HasColumnType("int(11)")
                 .HasColumnName("ID_sportsmen");
-            entity.Property(e => e.IdTrainingTime)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_TrainingTime");
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.TrainingDate).HasMaxLength(255);
             entity.Property(e => e.TypeId).HasColumnType("int(11)");
@@ -152,29 +147,9 @@ public partial class MoOnStarDgContext : DbContext
                 .HasForeignKey(d => d.IdSportsmen)
                 .HasConstraintName("FK_Training_Sportsman_ID");
 
-            entity.HasOne(d => d.IdTrainingTimeNavigation).WithMany(p => p.Training)
-                .HasForeignKey(d => d.IdTrainingTime)
-                .HasConstraintName("FK_Training_TrainingTime_ID");
-
             entity.HasOne(d => d.Type).WithMany(p => p.Training)
                 .HasForeignKey(d => d.TypeId)
                 .HasConstraintName("FK_Training_Math_ID");
-        });
-
-        modelBuilder.Entity<TrainingTime>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("TrainingTime");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
-            entity.Property(e => e.DateTime).HasColumnType("datetime");
-            entity.Property(e => e.Duration).HasMaxLength(255);
-            entity.Property(e => e.IdTraining)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Training");
         });
 
         modelBuilder.Entity<Type>(entity =>

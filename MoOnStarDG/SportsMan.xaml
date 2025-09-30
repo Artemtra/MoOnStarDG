@@ -49,7 +49,7 @@
                     <GridView>
                         <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}" Width="150"/>
                         <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding TrainingDate}" Width="100"/>
-                        <GridViewColumn Header="Длительность" DisplayMemberBinding="{Binding IdTrainingTime}" Width="150"/>
+                        <GridViewColumn Header="Длительность" DisplayMemberBinding="{Binding TrainingTime.Title}" Width="150"/>
                         <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Type.Title}" Width="100"/>
                     </GridView>
                 </ListView.View>

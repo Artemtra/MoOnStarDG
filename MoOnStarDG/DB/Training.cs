@@ -11,7 +11,7 @@ public partial class Training
 
     public int? TypeId { get; set; }
 
-    public int? IdTrainingTime { get; set; }
+    public string? TrainingTime { get; set; }
 
     public string? TrainingDate { get; set; }
 
@@ -22,8 +22,6 @@ public partial class Training
     public virtual Grade? IdGradeNavigation { get; set; }
 
     public virtual Sportsman? IdSportsmenNavigation { get; set; }
-
-    public virtual TrainingTime? IdTrainingTimeNavigation { get; set; }
 
     public virtual Type? Type { get; set; }
 }
