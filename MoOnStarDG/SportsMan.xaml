@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MoOnStarDG"
         mc:Ignorable="d"
-        Title="SportsMan" Height="450" Width="1000">
+        Title="SportsMan" Height="450" Width="1015">
     <Grid Background="#FFD2A782">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -23,16 +23,17 @@
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Label Content="Спортсмены:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-            <ListView x:Name="SportsmenList" 
+            <ListView x:Name="SportsmenList" ItemsSource="{Binding Sportsmen}"
                  Background="White"
                  Height="270">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}" Width="100"/>
-                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding FirstName}" Width="120"/>
-                        <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding DdataBirsDay}" Width="110"/>
-                        <GridViewColumn Header="Категория" DisplayMemberBinding="{Binding IdCategoryNavigation.Title}" Width="100"/>
-                        <GridViewColumn Header="Уровень" DisplayMemberBinding="{Binding IdLevelNavigation.Title}" Width="100"/>
+                        <GridViewColumn Header="Id спортсмена" DisplayMemberBinding="{Binding Id}" Width="100"/>
+                        <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}" Width="110"/>
+                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding FirstName}" Width="110"/>
+                        <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding DdataBirsDay}" Width="100"/>
+                        <GridViewColumn Header="Категория" DisplayMemberBinding="{Binding IdCategoryNavigation.Title}" Width="90"/>
+                        <GridViewColumn Header="Уровень" DisplayMemberBinding="{Binding IdLevelNavigation.Title}" Width="90"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -42,22 +43,42 @@
 
         <StackPanel Grid.Row="1" Grid.Column="2">
             <Label Content="Тренировки:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-            <ListView x:Name="TrainingsList" 
+            <ListView x:Name="TrainingsList" ItemsSource="{Binding Training}"
                  Background="White"
                  Height="270">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="оценка 5" Click="Grade5"/>
+                        <MenuItem Header="оценка 4" Click="Grade5"/>
+                        <MenuItem Header="оценка 3" Click="Grade5"/>
+                        <MenuItem Header="оценка 2" Click="Grade5"/>
+                        <MenuItem Header="оценка -2" Click="Grade5"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.View>
+                    
                     <GridView>
-                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}" Width="150"/>
-                        <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding TrainingDate}" Width="100"/>
-                        <GridViewColumn Header="Длительность" DisplayMemberBinding="{Binding TrainingTime.Title}" Width="150"/>
-                        <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Type.Title}" Width="100"/>
+                        <GridViewColumn Header="Id спортсмена" DisplayMemberBinding="{Binding IdSportsmen}" Width="90"/>
+                        <GridViewColumn Header="Название тренировки" DisplayMemberBinding="{Binding Title}" Width="130"/>
+                        <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding TrainingDate}" Width="70"/>
+                        <GridViewColumn Header="Длительность" DisplayMemberBinding="{Binding TrainingTime}" Width="90"/>
+                        <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Type.Title}" Width="150"/>
+                        <GridViewColumn Header="Оценка" DisplayMemberBinding="{Binding Grade.Title}" Width="70"/>
                     </GridView>
                 </ListView.View>
             </ListView>
         </StackPanel>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" >
 
-        <Button Grid.Row="2" Grid.ColumnSpan="3" Content="Назад в главное меню" 
-           Click="BackToMainBtn_Click" Width="150" Height="30" 
-           HorizontalAlignment="Center" Background="#FFE6DBA9"/>
+            <Button Content="Назад в главное меню" 
+           Click="BackToMainBtn_Click" Width="150"  
+           HorizontalAlignment="Center" Background="#FFE6DBA9" Margin="0,0,15,0"/>
+
+            <Button Click="BattonRefresh_Click"  Content="обновить"
+                Width="150" />
+
+        </StackPanel>
+        
     </Grid>
+    
 </Window>
