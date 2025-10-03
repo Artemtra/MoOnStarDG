@@ -88,26 +88,51 @@ namespace MoOnStarDG
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void setGrade(object sender, RoutedEventArgs e)
+        private void SetGrade(int gradeValue)
         {
             if (TrainingsList.SelectedItem == null)
             {
-                MessageBox.Show("выберете кому хотите поставить оценку");
+                MessageBox.Show("Выберите тренировку для оценки");
                 return;
             }
+
             try
             {
                 var selectedTraining = (Training)TrainingsList.SelectedItem;
-                db.SaveChanges();
-                LoadData();
+
+                // Находим оценку в базе данных
+                var grade = db.Grades.FirstOrDefault(g => g.Id == gradeValue);
+
+                if (grade != null)
+                {
+                    // Обновляем оценку у тренировки
+                    selectedTraining.IdGrade = grade.Id;
+
+                    // Сохраняем изменения в базе данных
+                    db.SaveChanges();
+
+                    // Обновляем отображение
+                    LoadData();
+
+                    MessageBox.Show($"Оценка {gradeValue} успешно поставлена");
+                }
+                else
+                {
+                    MessageBox.Show("Оценка не найдена в базе данных");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("dw");
+                MessageBox.Show($"Ошибка при установке оценки: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void Grade5(object sender, RoutedEventArgs e) => setGrade(5);
+        private void Grade5(object sender, RoutedEventArgs e) => SetGrade(5);
+        private void Grade4(object sender, RoutedEventArgs e) => SetGrade(4);
+        private void Grade3(object sender, RoutedEventArgs e) => SetGrade(3);
+        private void Grade2(object sender, RoutedEventArgs e) => SetGrade(2);
+        private void GradeMinus2(object sender, RoutedEventArgs e) => SetGrade(-2);
 
         private void BattonRefresh_Click(object sender, RoutedEventArgs e)
         {
