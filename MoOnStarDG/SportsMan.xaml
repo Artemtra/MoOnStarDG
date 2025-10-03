@@ -49,10 +49,10 @@
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="оценка 5" Click="Grade5"/>
-                        <MenuItem Header="оценка 4" Click="Grade5"/>
-                        <MenuItem Header="оценка 3" Click="Grade5"/>
-                        <MenuItem Header="оценка 2" Click="Grade5"/>
-                        <MenuItem Header="оценка -2" Click="Grade5"/>
+                        <MenuItem Header="оценка 4" Click="Grade4"/>
+                        <MenuItem Header="оценка 3" Click="Grade3"/>
+                        <MenuItem Header="оценка 2" Click="Grade2"/>
+                        <MenuItem Header="оценка -2" Click="GradeMinus2"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.View>
@@ -78,7 +78,11 @@
                 Width="150" />
 
         </StackPanel>
-        
+
+        <StackPanel Grid.Row="2"  Orientation="Horizontal"  >
+            <Label Content="Номер тренира:" FontSize="20"/>
+            <Label Content="8-800-555-35-35" FontSize="20"/>
+    </StackPanel>
     </Grid>
     
 </Window>

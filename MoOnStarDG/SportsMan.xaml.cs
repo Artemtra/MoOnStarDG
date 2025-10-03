@@ -88,22 +88,27 @@ namespace MoOnStarDG
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void Grade5(object sender, RoutedEventArgs e)
+        private void setGrade(object sender, RoutedEventArgs e)
         {
             if (TrainingsList.SelectedItem == null)
             {
                 MessageBox.Show("выберете кому хотите поставить оценку");
                 return;
             }
-            else if (TrainingsList.SelectedItem != null)
+            try
             {
-                
+                var selectedTraining = (Training)TrainingsList.SelectedItem;
+                db.SaveChanges();
+                LoadData();
             }
-            else
+            catch
             {
-                Console.WriteLine("ты еблан, ты как это сделал");
+                Console.WriteLine("dw");
             }
         }
+
+        private void Grade5(object sender, RoutedEventArgs e) => setGrade(5);
+
         private void BattonRefresh_Click(object sender, RoutedEventArgs e)
         {
             Signal();
